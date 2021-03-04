@@ -1,0 +1,119 @@
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "endpoint = 'http://28ba52f3-f442-4114-a951-bd92cea76d9f.eastus2.azurecontainer.io/score' #Replace with your endpoint\n",
+        "key = '9c1Z0xISrD7BHh6OFn8PEmLfeOlpICUC' #Replace with your key\n",
+        "\n",
+        "import urllib.request\n",
+        "import json\n",
+        "import os\n",
+        "\n",
+        "data = {\n",
+        "    \"Inputs\": {\n",
+        "        \"WebServiceInput0\":\n",
+        "        [\n",
+        "            {\n",
+        "                    'CulmenLength': 49.1,\n",
+        "                    'CulmenDepth': 4.8,\n",
+        "                    'FlipperLength': 1220,\n",
+        "                    'BodyMass': 5150,\n",
+        "            },\n",
+        "        ],\n",
+        "    },\n",
+        "    \"GlobalParameters\":  {\n",
+        "    }\n",
+        "}\n",
+        "\n",
+        "body = str.encode(json.dumps(data))\n",
+        "\n",
+        "\n",
+        "headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ key)}\n",
+        "\n",
+        "req = urllib.request.Request(endpoint, body, headers)\n",
+        "\n",
+        "try:\n",
+        "    response = urllib.request.urlopen(req)\n",
+        "    result = response.read()\n",
+        "    json_result = json.loads(result)\n",
+        "    output = json_result[\"Results\"][\"WebServiceOutput0\"][0]\n",
+        "    print('Cluster: {}'.format(output[\"Assignments\"]))\n",
+        "\n",
+        "except urllib.error.HTTPError as error:\n",
+        "    print(\"The request failed with status code: \" + str(error.code))\n",
+        "\n",
+        "    # Print the headers to help debug\n",
+        "    print(error.info())\n",
+        "    print(json.loads(error.read().decode(\"utf8\", 'ignore')))"
+      ],
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Cluster: 1\n"
+          ]
+        }
+      ],
+      "execution_count": 1,
+      "metadata": {
+        "gather": {
+          "logged": 1613929258618
+        }
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "outputs": [],
+      "execution_count": null,
+      "metadata": {
+        "collapsed": true,
+        "jupyter": {
+          "source_hidden": false,
+          "outputs_hidden": false
+        },
+        "nteract": {
+          "transient": {
+            "deleting": false
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3-azureml",
+      "language": "python",
+      "display_name": "Python 3.6 - AzureML"
+    },
+    "language_info": {
+      "name": "python",
+      "version": "3.6.9",
+      "mimetype": "text/x-python",
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "pygments_lexer": "ipython3",
+      "nbconvert_exporter": "python",
+      "file_extension": ".py"
+    },
+    "kernel_info": {
+      "name": "python3-azureml"
+    },
+    "nteract": {
+      "version": "nteract-front-end@1.0.0"
+    },
+    "microsoft": {
+      "host": {
+        "AzureML": {
+          "notebookHasBeenCompleted": true
+        }
+      }
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 2
+}
